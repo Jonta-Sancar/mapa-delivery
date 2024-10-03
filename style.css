@@ -1,5 +1,23 @@
 #map { height: 600px; }
 #form { margin: 20px; }
-body{
-  padding: 10px;
+
+.container{
+  padding: 0px !important;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
+}
+
+.container form {
+  margin: 0px !important;
+  padding: 20px 10px;
+  width: 100% !important;
+  box-shadow: 0px 0px 30px #0008;
+
+  position: relative;
+  z-index: 1000;
+}
+
+div.leaflet-routing-alternatives-container{
+  display: none !important;
 }
