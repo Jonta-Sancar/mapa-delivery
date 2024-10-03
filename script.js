@@ -14,6 +14,17 @@ var control = L.Routing.control({
 
 var markers = [];
 
+// Define o ícone personalizado
+var customIcon_for_origin = L.icon({
+  iconUrl: 'assets/person.svg', // Caminho para a imagem do ícone
+  // shadowUrl: 'shadow.png', // Caminho para a imagem da sombra (opcional)
+  iconSize: [50, 125], // Tamanho do ícone
+  shadowSize: [50, 64], // Tamanho da sombra
+  iconAnchor: [22, 94], // Ponto do ícone que corresponde à localização do marcador
+  shadowAnchor: [4, 62], // Ponto da sombra que corresponde à localização do marcador
+  popupAnchor: [-3, -76] // Ponto de onde o popup deve abrir em relação ao iconAnchor
+});
+
 function clearMap() {
   control.setWaypoints([]);
   markers.forEach(marker => map.removeLayer(marker));
@@ -83,7 +94,7 @@ function getLocation() {
               endereco[0] = endereco[0].join(', ');
               endereco = endereco.join(' - ');
 
-              let marker = L.marker([lat, lon]).addTo(map)
+              let marker = L.marker([lat, lon], { icon: customIcon_for_origin }).addTo(map)
                   .bindPopup(endereco)
                   .openPopup();
 
@@ -170,25 +181,37 @@ function toggleSpinner(){
   const loading = document.querySelector('.loading');
   loading.style.display = loading.style.display === 'none' ? 'flex' : 'none';
 }
+// Variável para armazenar o marcador da origem
+var originMarker;
 
 // Função para atualizar a posição da origem em tempo real
 function run() {
-  if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(function(position) {
-          var lat = position.coords.latitude;
-          var lon = position.coords.longitude;
-          var latLng = L.latLng(lat, lon);
-          control.spliceWaypoints(0, 1, latLng);
-          map.setView(latLng, 13);
-      }, function(error) {
-          console.error('Erro ao obter localização:', error);
-          alert('Erro ao obter localização: ' + error.message);
-      }, {
-          enableHighAccuracy: true,
-          maximumAge: 0,
-          timeout: 5000
-      });
-  } else {
-      alert('Geolocalização não é suportada pelo seu navegador.');
-  }
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var latLng = L.latLng(lat, lon);
+
+            // Remove o marcador anterior, se existir
+            if (originMarker) {
+                map.removeLayer(originMarker);
+            }
+
+            // Adiciona um novo marcador com o ícone personalizado
+            originMarker = L.marker(latLng, { icon: customIcon_for_origin }).addTo(map);
+
+            // Atualiza a origem da rota
+            control.spliceWaypoints(0, 1, latLng);
+            map.setView(latLng, 13);
+        }, function(error) {
+            console.error('Erro ao obter localização:', error);
+            alert('Erro ao obter localização: ' + error.message);
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000
+        });
+    } else {
+        alert('Geolocalização não é suportada pelo seu navegador.');
+    }
 }
