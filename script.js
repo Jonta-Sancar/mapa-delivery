@@ -64,6 +64,7 @@ function reverseGeocode(lat, lon, callback) {
 }
 
 function getLocation() {
+  toggleSpinner();
   clearMap()
   if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -88,18 +89,22 @@ function getLocation() {
 
               markers.push(marker);
               map.setView([lat, lon], 13);
+              toggleSpinner();
           });
       }, function(error) {
           console.error('Erro ao obter localização:', error);
           alert('Erro ao obter localização: ' + error.message);
+          toggleSpinner();
       });
   } else {
       alert('Geolocalização não é suportada pelo seu navegador.');
+      toggleSpinner();
   }
 }
 
 // Função para atualizar a rota
 async function updateRoute() {
+  toggleSpinner();
   clearMap()
   var startAddress     = document.getElementById('start').value;
   var startVetor_value = document.getElementById('start-vetor').value;
@@ -124,36 +129,66 @@ async function updateRoute() {
   } else {
     endVetor = await geocode(endAddress);
   }
-  
+
   control.setWaypoints([startVetor, endVetor]);
+  toggleSpinner();
 }
 
 // Função para habilitar a marcação de local no mapa
 function enableMapClick() {
   clearMap()
   map.on('click', function(e) {
-      var latLng = e.latlng;
-      reverseGeocode(latLng.lat, latLng.lng, function(address) {
-        let endereco = [[]];
-        address.road ? endereco[0].push(address.road): false;
-        address.suburb ? endereco[0].push(address.suburb): false;
-        address.city ? endereco[0].push(address.city): false;
-        endereco[1] = address.state;
-        
-        endereco[0] = endereco[0].join(', ');
-        endereco = endereco.join(' - ');
+    toggleSpinner();
+    var latLng = e.latlng;
+    reverseGeocode(latLng.lat, latLng.lng, function(address) {
+      let endereco = [[]];
+      address.road ? endereco[0].push(address.road): false;
+      address.suburb ? endereco[0].push(address.suburb): false;
+      address.city ? endereco[0].push(address.city): false;
+      endereco[1] = address.state;
+      
+      endereco[0] = endereco[0].join(', ');
+      endereco = endereco.join(' - ');
 
-        document.getElementById('end').value = endereco;
+      document.getElementById('end').value = endereco;
 
-        let marker = L.marker(latLng).addTo(map)
-            .bindPopup(endereco)
-            .openPopup();
+      let marker = L.marker(latLng).addTo(map)
+          .bindPopup(endereco)
+          .openPopup();
 
-        markers.push(marker);
-      });
+      markers.push(marker);
+      toggleSpinner();
+    });
   });
 }
 
 function clearVetor(vetor){
   document.getElementById(vetor+"-vetor").value = '';
+}
+
+function toggleSpinner(){
+  const loading = document.querySelector('.loading');
+  loading.style.display = loading.style.display === 'none' ? 'flex' : 'none';
+}
+
+// Função para atualizar a posição da origem em tempo real
+function run() {
+  if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+          var latLng = L.latLng(lat, lon);
+          control.spliceWaypoints(0, 1, latLng);
+          map.setView(latLng, 13);
+      }, function(error) {
+          console.error('Erro ao obter localização:', error);
+          alert('Erro ao obter localização: ' + error.message);
+      }, {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 5000
+      });
+  } else {
+      alert('Geolocalização não é suportada pelo seu navegador.');
+  }
 }
