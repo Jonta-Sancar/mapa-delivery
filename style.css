@@ -1,8 +1,10 @@
-#map { height: 600px; }
+#map { height: 100%; }
 #form { margin: 20px; }
 
 .container{
   padding: 0px !important;
+  height: 100dvh;
+  max-width: 500px;
   display: flex;
   flex-direction: column-reverse;
   overflow: hidden;
@@ -20,6 +22,10 @@
 
 div.leaflet-routing-alternatives-container{
   display: none !important;
+}
+
+.right-button{
+  width: 50px !important;
 }
 
 .loading{
