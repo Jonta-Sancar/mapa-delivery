@@ -1,11 +1,7 @@
-onload = () => {
-  document.querySelector('#run').addEventListener('click', () => {
-    run();
-  });
-}
-
 // Inicializa o mapa
-var map = L.map('map').setView([-12.2664, -38.9663], 13);
+var map = L.map('map', {
+  rotate: true
+}).setView([-12.2664, -38.9663], 13);
 
 // Adiciona a camada do OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -44,6 +40,11 @@ var customIcon_for_origin = L.icon({
   shadowAnchor: [4, 62], // Ponto da sombra que corresponde à localização do marcador
   popupAnchor: [-3, -76] // Ponto de onde o popup deve abrir em relação ao iconAnchor
 });
+
+// Exemplo de rotação - rotaciona 90 graus
+function rotateMap(degrees) {
+  map.setBearing(degrees);
+}
 
 function clearMap() {
   control.setWaypoints([]);
@@ -168,6 +169,7 @@ async function updateRoute() {
 
 // Função para habilitar a marcação de local no mapa
 function enableMapClick() {
+  alert('Clique no local desejado no mapa.');
   clearMap()
   map.on('click', function(e) {
     toggleSpinner();
