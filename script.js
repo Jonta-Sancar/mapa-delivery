@@ -163,6 +163,7 @@ async function updateRoute() {
   }
 
   control.setWaypoints([startVetor, endVetor]);
+  setDirection();
   toggleSpinner();
   toggleButtonUsage('#run');
 }
@@ -202,6 +203,22 @@ function clearVetor(vetor){
   document.getElementById(vetor+"-vetor").value = '';
 }
 
+function setDirection(){
+  // Verifica se o dispositivo suporta a API de orientação
+  if (window.DeviceOrientationEvent) {
+    // Adiciona um listener para o evento de orientação do dispositivo
+    window.addEventListener('deviceorientation', (event) => {
+      const alpha = event.alpha;  // O valor "alpha" indica a direção do heading (em graus)
+      if (alpha !== null) {
+        // Rotaciona o mapa com base no valor alpha
+        rotateMap(alpha);
+      }
+    }, true);
+  } else {
+    alert("Seu dispositivo não suporta a API de Orientação.");
+  }
+}
+
 function toggleSpinner(){
   const loading = document.querySelector('.loading');
   loading.style.display = loading.style.display === 'none' ? 'flex' : 'none';
@@ -236,6 +253,7 @@ function run() {
 
       // Atualiza a origem da rota
       control.spliceWaypoints(0, 1, latLng);
+      setDirection();
 
       // Obtenha os waypoints da rota
       var waypoints = control.getWaypoints().map(function(waypoint) {
