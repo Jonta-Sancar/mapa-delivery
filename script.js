@@ -1,3 +1,9 @@
+onload = () => {
+  document.querySelector('#run').addEventListener('click', () => {
+    run();
+  });
+}
+
 // Inicializa o mapa
 var map = L.map('map').setView([-12.2664, -38.9663], 13);
 
@@ -6,10 +12,24 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// Definindo ícones personalizados para origem e destino
+const customIconOrigin = L.icon({
+  iconUrl: './assets/person.svg', // Ícone de origem (exemplo)
+  iconSize: [38, 38], // Tamanho do ícone
+  iconAnchor: [19, 38], // Âncora (ponto de referência do ícone)
+});
+
 // Inicializa o controle de roteamento
 var control = L.Routing.control({
   waypoints: [],
-  routeWhileDragging: true
+  routeWhileDragging: true,
+  createMarker: function(i, waypoint, n) {
+      if (i === 0) {
+          return L.marker(waypoint.latLng, { icon: customIconOrigin }).bindPopup("Origem");
+      } else {
+          return L.marker(waypoint.latLng);
+      }
+  }
 }).addTo(map);
 
 var markers = [];
@@ -143,6 +163,7 @@ async function updateRoute() {
 
   control.setWaypoints([startVetor, endVetor]);
   toggleSpinner();
+  toggleButtonUsage('#run');
 }
 
 // Função para habilitar a marcação de local no mapa
@@ -181,37 +202,61 @@ function toggleSpinner(){
   const loading = document.querySelector('.loading');
   loading.style.display = loading.style.display === 'none' ? 'flex' : 'none';
 }
-// Variável para armazenar o marcador da origem
-var originMarker;
+
+function toggleButtonUsage(button_selector, action){
+  const button = document.querySelector(button_selector);
+  
+  if(action){
+    if(action == 'disable') {
+      button.classList.add('disabled');
+    } else {
+      button.classList.remove('disabled');
+    }
+  } else {
+    if(button.classList.contains('disabled')){
+      button.classList.remove('disabled');
+    } else {
+      button.classList.add('disabled');
+    }
+  }
+}
 
 // Função para atualizar a posição da origem em tempo real
 function run() {
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            var latLng = L.latLng(lat, lon);
+  toggleSpinner();
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(function(position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      var latLng = L.latLng(lat, lon);
 
-            // Remove o marcador anterior, se existir
-            if (originMarker) {
-                map.removeLayer(originMarker);
-            }
+      // Atualiza a origem da rota
+      control.spliceWaypoints(0, 1, latLng);
 
-            // Adiciona um novo marcador com o ícone personalizado
-            originMarker = L.marker(latLng, { icon: customIcon_for_origin }).addTo(map);
+      // Obtenha os waypoints da rota
+      var waypoints = control.getWaypoints().map(function(waypoint) {
+        return waypoint.latLng;
+      });
 
-            // Atualiza a origem da rota
-            control.spliceWaypoints(0, 1, latLng);
-            map.setView(latLng, 13);
-        }, function(error) {
-            console.error('Erro ao obter localização:', error);
-            alert('Erro ao obter localização: ' + error.message);
-        }, {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 5000
-        });
-    } else {
-        alert('Geolocalização não é suportada pelo seu navegador.');
-    }
+      // Ajuste o zoom do mapa para caber todos os waypoints
+      if (waypoints.length > 1) {
+        var bounds = L.latLngBounds(waypoints);
+        map.fitBounds(bounds);
+      } else {
+        map.setView(latLng, 13);
+      }
+      toggleButtonUsage('#tracar-rota', 'disable');
+      toggleButtonUsage('#run', 'disable');
+    }, function(error) {
+      console.error('Erro ao obter localização:', error);
+      alert('Erro ao obter localização: ' + error.message);
+    }, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000
+    });
+  } else {
+    alert('Geolocalização não é suportada pelo seu navegador.');
+  }
+  toggleSpinner();
 }

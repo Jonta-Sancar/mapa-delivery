@@ -24,14 +24,14 @@
   <div class="loading" style="display: none;">
     <div class="spinner"></div>
   </div>
-  <div class="container" style="max-width: 500px;">
+  <div class="container">
     <form id="form" onsubmit="return false">
       <div class="mb-3">
         <label class="form-label" for="start">Origem:</label>
         <div class="d-flex">
           <input type="hidden" id="start-vetor">
           <input type="text" class="form-control" id="start" placeholder="Endereço de origem">
-          <button type="button" class="form-control" style="width: fit-content;" onclick="getLocation()">
+          <button type="button" class="form-control right-button" onclick="getLocation()">
             <span class="material-symbols-outlined">my_location</span>
           </button>
         </div>
@@ -42,14 +42,14 @@
         <div class="d-flex">
           <input type="hidden" id="end-vetor">
           <input type="text" class="form-control" id="end" placeholder="Endereço de destino">
-          <button type="button" class="form-control" style="width: fit-content;"  onclick="enableMapClick()">
+          <button type="button" class="form-control right-button"  onclick="enableMapClick()">
             <span class="material-symbols-outlined">pin_drop</span>
           </button>
       </div>
       </div>
-      <div class="d-flex gap-3 justiy-content-between">
-        <button class="btn btn-primary" style="width: 90%;" onclick="updateRoute()">Traçar Rota</button>
-        <button class="btn btn-primary" style="width: 10%;" onclick="run()">Ir</button>
+      <div class="d-flex justiy-content-between">
+        <button id="tracar-rota" class="btn btn-primary" style="width: 90%;" onclick="updateRoute()">Traçar Rota</button>
+        <button id="run" class="btn btn-primary right-button disabled">Ir</button>
       </div>
     </form>
 
