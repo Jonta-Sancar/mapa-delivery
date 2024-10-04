@@ -193,6 +193,8 @@ function enableMapClick() {
       markers.push(marker);
       toggleSpinner();
     });
+    
+    document.getElementById('end-vetor').value = latLng.lat + ',' + latLng.lng;
   });
 }
 
