@@ -26,23 +26,26 @@
   <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
 
   <script>
-    const mapContainer = document.querySelector('body');
-    const hammer = new Hammer(mapContainer);
-        
-    let currentRotation = 0;
-    
-    // Detecta o gesto de rotação (twist com dois dedos)
-    hammer.get('rotate').set({ enable: true });
-    
-    // Aplica a rotação ao mapa com base no gesto
-    hammer.on('rotate', function(event) {
-      document.querySelector('.describe').innerHTML = JSON.stringify(event);
-      currentRotation += event.rotation;  // Acumula o valor da rotação
-      document.querySelector('.describe').innerHTML = currentRotation;
-      rotateMap(currentRotation)
-    });
-    
-    hammer.on('rotateend', ()=>{}); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
+    onload = () => {
+      const mapContainer = document.querySelector('body');
+      const hammer = new Hammer(mapContainer);
+          
+      let currentRotation = 0;
+      
+      // Detecta o gesto de rotação (twist com dois dedos)
+      hammer.get('rotate').set({ enable: true });
+      
+      // Aplica a rotação ao mapa com base no gesto
+      hammer.on('rotate', function(event) {
+        document.querySelector('.describe').innerHTML += "inicio";
+        document.querySelector('.describe').innerHTML += JSON.stringify(event);
+        currentRotation += event.rotation;  // Acumula o valor da rotação
+        document.querySelector('.describe').innerHTML += currentRotation;
+        rotateMap(currentRotation)
+      });
+      
+      hammer.on('rotateend', ()=>{}); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
+    }
   </script>
 </body>
 </html>
