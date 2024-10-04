@@ -1,3 +1,12 @@
+<!-- 
+ Author: Jonta Sancar
+
+ Dependences:
+  - Leaflet
+  - Leaflet Routing Machine
+  - Bootstrap
+  - Google Icons
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -21,7 +30,7 @@
         <label class="form-label" for="start">Origem:</label>
         <div class="d-flex">
           <input type="hidden" id="start-vetor">
-          <input type="text" class="form-control" id="start" placeholder="Endereço de origem" value="Rua Ipuaçu, 1396, Campo Limpo, Feira de Santana - BA">
+          <input type="text" class="form-control" id="start" placeholder="Endereço de origem">
           <button type="button" class="form-control" style="width: fit-content;" onclick="getLocation()">
             <span class="material-symbols-outlined">my_location</span>
           </button>
@@ -32,7 +41,7 @@
         <label class="form-label" for="end">Destino:</label>
         <div class="d-flex">
           <input type="hidden" id="end-vetor">
-          <input type="text" class="form-control" id="end" placeholder="Endereço de destino" value="Prefeitura municipal de feira de santana">
+          <input type="text" class="form-control" id="end" placeholder="Endereço de destino">
           <button type="button" class="form-control" style="width: fit-content;"  onclick="enableMapClick()">
             <span class="material-symbols-outlined">pin_drop</span>
           </button>
