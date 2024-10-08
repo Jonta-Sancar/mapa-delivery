@@ -74,7 +74,7 @@ div.leaflet-routing-alternatives-container{
 }
 
 #side-buttons button{
-  background-color: transparent;
+  background-color: #fff8;
   width: 50px;
   height: 50px;
   
@@ -84,6 +84,10 @@ div.leaflet-routing-alternatives-container{
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: .5s;
+}
+#side-buttons button:active{
+  background-color: #838383;
 }
 /* SIDE BUTTONS */
 
