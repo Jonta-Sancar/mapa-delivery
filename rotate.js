@@ -25,7 +25,6 @@ function enableRotateByHammer(){
     final_rotation = current_rotation + element_rotation;
     
     circle.style.transform = `rotate(${final_rotation}deg)`;
-    document.querySelector('.describe').innerHTML = final_rotation;
     rotateMap(final_rotation);
   });
   
