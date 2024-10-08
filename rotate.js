@@ -23,12 +23,18 @@ function enableRotateByHammer(){
     current_rotation   = Number((event.rotation - initial_rotation).toFixed(2));  // pega a parcela de rotação
 
     final_rotation = current_rotation + element_rotation;
-    
-    circle.style.transform = `rotate(${final_rotation}deg)`;
-    rotateMap(final_rotation);
+    applyRotation(final_rotation);
   });
   
   hammer.on('rotateend', ()=>{
-    circle.dataset.rotation = final_rotation;
+    applyRotation(final_rotation);
   }); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
+}
+
+function applyRotation(deg){
+  const circle = document.querySelector('.circle');
+  circle.style.transform = `rotate(${deg}deg)`;
+  rotateMap(deg);
+
+  circle.dataset.rotation = deg;
 }
