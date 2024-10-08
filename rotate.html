@@ -6,46 +6,102 @@
   <title>Document</title>
 
   <style>
+    *{
+      padding: 0px;
+      margin: 0px;
+      box-sizing: border-box;
+    }
+
+    #container{
+      padding: 20px;
+      width: 100dvw;
+      height: 100dvh;
+      position: relative;
+    }
+
     .circle{
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background-color: #f00;
+      border: 2px solid;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
+    .circle::after{
+      content: '';
+      border: 15px solid transparent;
+      border-bottom: 0px solid transparent;
+      border-top: 45px solid #000;
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .circle::before{
+      content: '';
+      border: 15px solid transparent;
+      border-bottom: 45px solid #f00;
+      border-top: 0px solid transparent;
+      position: absolute;
+      top: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   </style>
 </head>
 <body>
-  <div class="circle"></div>
-
-  <div class="describe"></div>
+  <div id="container">
+    <div class="circle" data-rotation="0"></div>
+  
+    <div class="describe"></div>
+  </div>
 
   <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
 
   <script>
     onload = () => {
-      document.querySelector('.describe').innerHTML += "inicio - 00";
+      const describe = document.querySelector('.describe');
+      const circle   = document.querySelector('.circle');
+      describe.innerHTML += "aguardando interação";
+
       const mapContainer = document.querySelector('body');
       const hammer = new Hammer(mapContainer);
           
-      let currentRotation = 0;
+      let current_rotation = 0;
+      let element_rotation = 0;
+      let initial_rotation = 0;
+      let final_rotation = 0;
       
       // Detecta o gesto de rotação (twist com dois dedos)
       hammer.get('rotate').set({ enable: true });
       
+      // Pega a rotação atual do círculo e inicia o ajuste de rotação
+      hammer.on('rotatestart', function(event) {
+        element_rotation = Number(circle.dataset.rotation);
+        initial_rotation = event.rotation; // Armazena a rotação inicial do gesto
+      });
+
       // Aplica a rotação ao mapa com base no gesto
       hammer.on('rotate', function(event) {
-        document.querySelector('.describe').innerHTML += "inicio";
-        document.querySelector('.describe').innerHTML += JSON.stringify(event);
-        currentRotation += event.rotation;  // Acumula o valor da rotação
-        document.querySelector('.describe').innerHTML += currentRotation;
-        rotateMap(currentRotation)
+        describe.innerHTML = "rotação: ";
+        current_rotation   = Number((event.rotation - initial_rotation).toFixed(2));  // pega a parcela de rotação
+
+        describe.innerHTML += current_rotation + ', ' + element_rotation;
+
+        // const final_rotation = current_rotation;
+        final_rotation = current_rotation + element_rotation;
+        
+        circle.style.transform = `translate(-50%, -50%) rotate(${final_rotation}deg)`;
       });
       
-      hammer.on('rotateend', ()=>{}); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
+      hammer.on('rotateend', ()=>{
+        describe.innerHTML = 'rotação: ' + current_rotation + ', ' + element_rotation;
+        circle.dataset.rotation = final_rotation;
+      }); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
     }
   </script>
 </body>
