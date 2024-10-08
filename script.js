@@ -252,6 +252,7 @@ function toggleButtonUsage(button_selector, action){
 
 // Função para atualizar a posição da origem em tempo real
 function run() {
+  document.querySelector('#map').dataset.status = 'follow'
   toggleSpinner();
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(function(position) {
