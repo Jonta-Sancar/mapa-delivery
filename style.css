@@ -27,6 +27,11 @@
 
 .right-button{
   width: 50px !important;
+  transition: .5s;
+}
+
+.right-button:active{
+  filter: brightness(0.5);
 }
 
 /* desativa o painel de instruções */
