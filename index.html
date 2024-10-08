@@ -63,8 +63,20 @@
       </div>
     </form>
 
-    <div id="map">
-      <div class="circle" data-rotation="0" onclick="applyRotation(0)"></div>
+    <div id="map" data-status="free">
+      <!-- data-status pode ser: free, full, follow -->
+      <div id="side-buttons">
+        <button type="button" class="side-button" data-rotation="0" onclick="document.querySelector('#map').dataset.status = 'free'">
+          <span class="material-symbols-outlined">radio_button_unchecked</span>
+        </button>
+        <button type="button" class="side-button" data-rotation="0" onclick="document.querySelector('#map').dataset.status = 'full'">
+          <span class="material-symbols-outlined">radio_button_checked</span>
+        </button>
+        <button type="button" class="side-button" data-rotation="0" onclick="document.querySelector('#map').dataset.status = 'follow'">
+          <span class="material-symbols-outlined">my_location</span>
+        </button>
+        <button type="button" class="circle" data-rotation="0" onclick="applyRotation(0)"></button>
+      </div>
       <div id="instructions" style="display: none;"></div>
     </div><!-- container do mapa -->
   </div>
