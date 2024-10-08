@@ -211,7 +211,8 @@ function setDirection(){
       const alpha = event.alpha;  // O valor "alpha" indica a direção do heading (em graus)
       if (alpha !== null) {
         // Rotaciona o mapa com base no valor alpha
-        rotateMap(alpha);
+        console.log('alpha:', alpha)
+        applyRotation(alpha);
       }
     }, true);
   } else {
@@ -250,6 +251,7 @@ function run() {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
       var latLng = L.latLng(lat, lon);
+      //  {lat: -12.2137, lng: -38.9732}
 
       // Atualiza a origem da rota
       control.spliceWaypoints(0, 1, latLng);
@@ -260,12 +262,14 @@ function run() {
         return waypoint.latLng;
       });
 
+      const status = document.querySelector('#map').dataset.status;
+
       // Ajuste o zoom do mapa para caber todos os waypoints
-      if (waypoints.length > 1) {
+      if (waypoints.length > 1 && status == 'full') {
         var bounds = L.latLngBounds(waypoints);
         map.fitBounds(bounds);
-      } else {
-        map.setView(latLng, 13);
+      } else if (status == 'follow') {
+        map.setView(latLng, 1000);
       }
       toggleButtonUsage('#tracar-rota', 'disable');
       toggleButtonUsage('#run', 'disable');
