@@ -172,31 +172,39 @@ async function updateRoute() {
 function enableMapClick() {
   alert('Clique no local desejado no mapa.');
   clearMap()
-  map.on('click', function(e) {
-    toggleSpinner();
-    var latLng = e.latlng;
-    reverseGeocode(latLng.lat, latLng.lng, function(address) {
-      let endereco = [[]];
-      address.road ? endereco[0].push(address.road): false;
-      address.suburb ? endereco[0].push(address.suburb): false;
-      address.city ? endereco[0].push(address.city): false;
-      endereco[1] = address.state;
-      
-      endereco[0] = endereco[0].join(', ');
-      endereco = endereco.join(' - ');
+  map.on('click', applyMapClick);
+}
 
-      document.getElementById('end').value = endereco;
-
-      let marker = L.marker(latLng).addTo(map)
-          .bindPopup(endereco)
-          .openPopup();
-
-      markers.push(marker);
-      toggleSpinner();
-    });
+function applyMapClick(e){
+  toggleSpinner();
+  var latLng = e.latlng;
+  reverseGeocode(latLng.lat, latLng.lng, function(address) {
+    let endereco = [[]];
+    address.road ? endereco[0].push(address.road): false;
+    address.suburb ? endereco[0].push(address.suburb): false;
+    address.city ? endereco[0].push(address.city): false;
+    endereco[1] = address.state;
     
-    document.getElementById('end-vetor').value = latLng.lat + ',' + latLng.lng;
+    endereco[0] = endereco[0].join(', ');
+    endereco = endereco.join(' - ');
+
+    document.getElementById('end').value = endereco;
+
+    let marker = L.marker(latLng).addTo(map)
+        .bindPopup(endereco)
+        .openPopup();
+
+    markers.push(marker);
+    toggleSpinner();
   });
+  
+  document.getElementById('end-vetor').value = latLng.lat + ',' + latLng.lng;
+  
+  disableMapClick();
+}
+
+function disableMapClick(){
+  map.off('click', applyMapClick);
 }
 
 function clearVetor(vetor){
