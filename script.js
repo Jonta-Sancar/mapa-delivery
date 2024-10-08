@@ -214,17 +214,20 @@ function setDirection(){
   // Verifica se o dispositivo suporta a API de orientação
   if (window.DeviceOrientationEvent) {
     // Adiciona um listener para o evento de orientação do dispositivo
-    window.addEventListener('deviceorientation', (event) => {
-      const alpha = event.alpha;  // O valor "alpha" indica a direção do heading (em graus)
-      if (alpha !== null) {
-        // Rotaciona o mapa com base no valor alpha
-        console.log('alpha:', alpha)
-        applyRotation(alpha);
-      }
-    }, true);
+    window.addEventListener('deviceorientation', setDeviceOrientation);
   } else {
     alert("Seu dispositivo não suporta a API de Orientação.");
   }
+}
+
+function setDeviceOrientation(event){
+  const alpha = event.alpha;  // O valor "alpha" indica a direção do heading (em graus)
+  if (alpha !== null) {
+    // Rotaciona o mapa com base no valor alpha
+    console.log('alpha:', alpha)
+    applyRotation(alpha);
+  }
+
 }
 
 function toggleSpinner(){
@@ -252,7 +255,7 @@ function toggleButtonUsage(button_selector, action){
 
 // Função para atualizar a posição da origem em tempo real
 function run() {
-  document.querySelector('#map').dataset.status = 'follow'
+  toggleRunMode('follow');
   toggleSpinner();
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(function(position) {
@@ -296,4 +299,13 @@ function run() {
     alert('Geolocalização não é suportada pelo seu navegador.');
   }
   toggleSpinner();
+}
+
+function toggleRunMode(mode){
+  const map = document.querySelector('#map');
+  map.dataset.status = mode;
+  
+  if(mode == 'free' && window.DeviceOrientationEvent){
+    window.removeEventListener('deviceorientation', setDeviceOrientation);
+  }
 }
