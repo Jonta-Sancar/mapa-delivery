@@ -32,6 +32,7 @@ function enableRotateByHammer(){
 }
 
 function applyRotation(deg){
+  deg = deg - 180;
   const circle = document.querySelector('.circle');
   circle.style.transform = `rotate(${deg}deg)`;
   rotateMap(deg);
