@@ -163,7 +163,6 @@ async function updateRoute() {
   }
 
   control.setWaypoints([startVetor, endVetor]);
-  setDirection();
   toggleSpinner();
   toggleButtonUsage('#run');
 }
@@ -263,7 +262,6 @@ function run() {
 
       // Atualiza a origem da rota
       control.spliceWaypoints(0, 1, latLng);
-      setDirection();
 
       // Obtenha os waypoints da rota
       var waypoints = control.getWaypoints().map(function(waypoint) {
@@ -271,6 +269,10 @@ function run() {
       });
 
       const status = document.querySelector('#map').dataset.status;
+
+      if(status != 'free'){
+        setDirection();
+      }
 
       // Ajuste o zoom do mapa para caber todos os waypoints
       if (waypoints.length > 1 && status == 'full') {
