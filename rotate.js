@@ -31,8 +31,11 @@ function enableRotateByHammer(){
   }); // Quando o gesto de rotação terminar, aplica o ângulo final ao mapa
 }
 
-function applyRotation(deg){
-  deg = deg - 180;
+function applyRotation(deg, is_running){
+  if(is_running){
+    deg = deg - 180;
+  }
+  
   const circle = document.querySelector('.circle');
   circle.style.transform = `rotate(${deg}deg)`;
   rotateMap(deg);

@@ -225,7 +225,7 @@ function setDeviceOrientation(event){
   if (alpha !== null) {
     // Rotaciona o mapa com base no valor alpha
     console.log('alpha:', alpha)
-    applyRotation(alpha);
+    applyRotation(alpha, true);
   }
 
 }
