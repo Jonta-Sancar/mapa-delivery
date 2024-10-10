@@ -273,9 +273,12 @@ function run() {
       });
 
       const status = document.querySelector('#map').dataset.status;
-
+      toggleRunMode(status);
+      
       if(status != 'free'){
         setDirection();
+      } else {
+        window.removeEventListener();
       }
 
       // Ajuste o zoom do mapa para caber todos os waypoints
