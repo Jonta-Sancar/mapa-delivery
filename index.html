@@ -64,7 +64,10 @@
     </form>
 
     <div id="map" data-status="free">
-      <!-- data-status pode ser: free, full, follow -->
+      <button id="btn-alinhar" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAlinhar">
+        Alinhar
+      </button>
+
       <div id="side-buttons">
         <button type="button" class="side-button" data-rotation="0" onclick="document.querySelector('#map').dataset.status = 'free'">
           <span class="material-symbols-outlined">radio_button_unchecked</span>
@@ -79,6 +82,43 @@
       </div>
       <div id="instructions" style="display: none;"></div>
     </div><!-- container do mapa -->
+  </div>
+
+  <div class="modal fade" id="modalAlinhar" tabindex="-1" aria-labelledby="modalAlinharLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h1 class="modal-title fs-5" id="modalAlinharLabel">Alinhar Bússola</h1>
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" aria-label="Close">
+            <span class="material-symbols-outlined text-white">
+              close
+            </span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-alinhar-bussola">
+            <button id="bussolo-alinhar" type="button" class="circle" data-rotation="0"></button>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-secondary" data-action="reset">Recomeçar</button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-action="marcar">Marcar Posição</button>
+            </div>
+            
+            <div class="col">
+              <button type="button" class="btn btn-success" data-action="finalizar">Finalizar</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Ajuda</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
