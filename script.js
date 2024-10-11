@@ -226,6 +226,7 @@ function setDeviceOrientation(event){
     // Rotaciona o mapa com base no valor alpha
     console.log('alpha:', alpha)
     applyRotation(alpha, true);
+    definirAgulacaoBussula(alpha);
   }
 
 }
