@@ -42,3 +42,7 @@ function applyRotation(deg, is_running){
 
   circle.dataset.rotation = deg;
 }
+
+function adjustDeg(deg){
+  return deg < 0 ? (deg * -1) + 300 : deg;
+}

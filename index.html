@@ -10,7 +10,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <title>Rota com Leaflet e OpenStreetMap</title>
+  <title>Seu Mapa</title>
+  <meta name="description" content="Mapa com definição e acompanhamento de rotas utilizando o Leaflet e OpenStreetMap, projeto open source">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -36,6 +37,7 @@
   </div>
   <div class="container">
     <form id="form" onsubmit="return false">
+      <div class="describe"></div>
       <div class="mb-3">
         <label class="form-label" for="start">Origem:</label>
         <div class="d-flex">
@@ -64,7 +66,7 @@
     </form>
 
     <div id="map" data-status="free">
-      <button id="btn-alinhar" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAlinhar">
+      <button id="btn-alinhar" type="button" class="btn btn-primary disabled d-none" data-bs-toggle="modal" data-bs-target="#modalAlinhar">
         Alinhar
       </button>
 
@@ -96,6 +98,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <div class="text-center" id="desvio-deg">0.0°</div>
           <div class="container-alinhar-bussola">
             <button id="bussolo-alinhar" type="button" class="circle" data-rotation="0"></button>
           </div>
@@ -136,10 +139,13 @@
       });
 
       enableRotateByHammer();
+      applyButtonActions();
+      // setDirection();
     }
   </script>
 
   <script src="./script.js"></script>
   <script src="./rotate.js"></script>
+  <script src="./alinhar_bussola.js"></script>
 </body>
 </html>

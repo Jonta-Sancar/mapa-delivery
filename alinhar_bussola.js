@@ -29,8 +29,18 @@ function applyButtonActions(){
 
 function definirAgulacaoBussula(deg){
     const bussola = document.querySelector('#bussolo-alinhar');
+    const desvio_deg = document.querySelector('#desvio-deg');
 
     bussola.dataset.deg = deg;
+
+    if(bussola.dataset.firstPosition && !bussola.dataset.secondPosition){
+        const deg = bussola.dataset.deg < 0 ? bussola.dataset.deg * -1 : bussola.dataset.deg;
+        const first_position = bussola.dataset.firstPosition < 0 ? bussola.dataset.firstPosition * -1: bussola.dataset.firstPosition;
+        
+        const positions = [deg, first_position].sort();
+
+        desvio_deg.innerHTML = (positions[0] - positions[1]) + '°';
+    }
 }
 
 function salvarDesvio(deg){

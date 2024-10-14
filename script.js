@@ -1,7 +1,24 @@
 // Inicializa o mapa
+var userLat = 0;
+var userLon = 0;
+var zoom_inicial = 1.5;
+
+
 var map = L.map('map', {
   rotate: true
-}).setView([-12.2664, -38.9663], 13);
+}).setView([userLat, userLon], zoom_inicial);
+
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(function(position) {
+    userLat = position.coords.latitude;
+    userLon = position.coords.longitude;
+
+    if(userLat != 0 && userLon != 0){
+      zoom_inicial = 13;
+    }
+    map.setView([userLat, userLon], zoom_inicial)
+  });
+}
 
 // Adiciona a camada do OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -221,10 +238,10 @@ function setDirection(){
 }
 
 function setDeviceOrientation(event){
-  const alpha = event.alpha;  // O valor "alpha" indica a direção do heading (em graus)
+  const alpha = adjustDeg(event.alpha);  // O valor "alpha" indica a direção do heading (em graus)
   if (alpha !== null) {
+    document.querySelector('.describe').innerHTML = alpha.toFixed(2) + '°';
     // Rotaciona o mapa com base no valor alpha
-    console.log('alpha:', alpha)
     applyRotation(alpha, true);
     definirAgulacaoBussula(alpha);
   }
@@ -258,6 +275,8 @@ function toggleButtonUsage(button_selector, action){
 function run() {
   toggleRunMode('follow');
   toggleSpinner();
+
+  document.querySelector('#btn-alinhar').classList.remove('disabled');
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition(function(position) {
       var lat = position.coords.latitude;
